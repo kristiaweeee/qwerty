@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  loadbalancer:
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
+    ports:
+      - "8080:80"
+    depends_on:
+      - core-service
+      - date-service
+
+  core-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.core
+    expose:
+      - "80"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/health"]
+      interval: 30s
+      retries: 3
+
+  date-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.date
+    expose:
+      - "80"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/health"]
+      interval: 30s
+      retries: 3

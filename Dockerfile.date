@@ -1,0 +1,4 @@
+FROM alpine:latest
+COPY ./bin/date-service /date-service
+EXPOSE 80
+ENTRYPOINT ["/date-service"]
